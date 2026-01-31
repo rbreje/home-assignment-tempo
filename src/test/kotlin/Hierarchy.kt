@@ -128,7 +128,7 @@ class ArrayBasedHierarchy(
 
 class FilterTest {
     @Test
-    fun testFilter() {
+    fun testFilterWithSimpleHierarchy() {
         val unfiltered: Hierarchy = ArrayBasedHierarchy(
             intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),
             intArrayOf(0, 1, 2, 3, 1, 0, 1, 0, 1, 1, 2)
@@ -140,4 +140,83 @@ class FilterTest {
         )
         assertEquals(filteredExpected.formatString(), filteredActual.formatString())
     }
+
+    @Test
+    fun testFilterWithEmptyHierarchy() {
+        val unfiltered: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(),
+            intArrayOf()
+        )
+        val filteredActual: Hierarchy = unfiltered.filter { nodeId -> nodeId % 3 != 0 }
+        val filteredExpected: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(),
+            intArrayOf()
+        )
+        assertEquals(filteredExpected.formatString(), filteredActual.formatString())
+    }
+
+    @Test
+    fun testFilterWithHierarchyCompletelyRemoved() {
+        val unfiltered: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(1, 2, 3, 4, 5),
+            intArrayOf(0, 1, 2, 3, 4)
+        )
+        val filteredActual: Hierarchy = unfiltered.filter { nodeId -> nodeId != 1 }
+        val filteredExpected: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(),
+            intArrayOf()
+        )
+        assertEquals(filteredExpected.formatString(), filteredActual.formatString())
+    }
+
+    @Test
+    fun testFilterWithDifferentCondition() {
+        val unfiltered: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),
+            intArrayOf(0, 1, 2, 3, 1, 0, 1, 0, 1, 1, 2)
+        )
+        val filteredActual: Hierarchy = unfiltered.filter { nodeId -> nodeId % 2 != 0 }
+        val filteredExpected: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(1, 5),
+            intArrayOf(0, 1)
+        )
+        assertEquals(filteredExpected.formatString(), filteredActual.formatString())
+    }
+
+    @Test
+    fun testFilterWithMultipleRootsAndElements() {
+        val unfiltered: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+                41, 42, 43, 44, 45, 46, 47, 48, 49, 50
+            ),
+            intArrayOf(
+                0, 1, 2, 2, 1, 2, 3, 3, 2, 1,
+                0, 1, 2, 1, 2, 3, 2, 0, 1, 2,
+                3, 2, 1, 0, 1, 1, 2, 2, 3, 1,
+                0, 1, 2, 2, 1, 2, 1, 0, 1, 2,
+                1, 2, 3, 2, 1, 0, 1, 1, 2, 2
+            )
+        )
+        val filteredActual: Hierarchy = unfiltered.filter { nodeId -> nodeId % 5 != 0 }
+        val filteredExpected: Hierarchy = ArrayBasedHierarchy(
+            intArrayOf(
+                1, 2, 3, 4, 11, 12, 13, 14, 17, 18,
+                19, 22, 23, 24, 26, 27, 28, 29, 31, 32,
+                33, 34, 37, 38, 39, 41, 42, 43, 44, 46,
+                47, 48, 49
+            ),
+            intArrayOf(
+                0, 1, 2, 2, 0, 1, 2, 1, 2, 0,
+                1, 2, 1, 0, 1, 2, 2, 3, 0, 1,
+                2, 2, 1, 0, 1, 1, 2, 3, 2, 0,
+                1, 1, 2
+            )
+        )
+        assertEquals(filteredExpected.formatString(), filteredActual.formatString())
+    }
+
 }
