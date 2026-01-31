@@ -2,7 +2,7 @@ There you have the solved assignments. I have spent around a couple of hours to 
 
 [SimpleCache Assignment](/Take%20Home%20Assessment%20-%20SimpleCache.md)
 
-[Hierarchy Assignment](/Hierarchy.kt)
+[Hierarchy Assignment](/src/test/kotlin/Hierarchy.kt)
 
-The complexity of the filter method is O(n) depending on the tree size.
+The time complexity of the filter method is O(n).
 
