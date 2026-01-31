@@ -31,3 +31,17 @@ class SimpleCache<K, V> {
     }
 }
 ```
+
+## Raul's Notes
+
+### Issue 1 - Missing cleanup
+
+Based on the current implementation, the old or expired entries are never removed from the map. Hence, the cache will grow indefinitely and the application will throw an OutOfMemory exception in no time due to the hundreds of additions expected per second. Depending on how the fault tolerance was handled here, the users might have a slower experience with the app or they might not be even able to use it at all.
+
+### Issue 2 - Getter age checking
+
+There is a high probability to retrieve an already outdated value because between checking the timestamp and returning the value, another thread might add a new entry with the same key. Hence, the getter doesn't provide a predictable behaviour. This might not be a big problem in a low intensive traffic, but it's for sure a huge problem when expecting thousands of reads and hundreds of writes. The data will not reflect the reality and the user experience is going to be affected.
+
+### Issue 3 - Misleading cache size
+
+The size method will not reflect the actual cache size because of the not removed stale values, and this gives always unexpected behaviour. However, if by any reasons the size of the cache is handled outside of its class, there might be nothing added anymore to it. This won't be a problem in case of a correct purging mechanism.
