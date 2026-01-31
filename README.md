@@ -4,3 +4,5 @@ There you have the solved assignments. I have spent around a couple of hours to 
 
 [Hierarchy Assignment](/Hierarchy.kt)
 
+The complexity of the filter method is O(n) depending on the tree size.
+
